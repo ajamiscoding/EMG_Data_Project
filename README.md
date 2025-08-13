@@ -41,4 +41,3 @@ python compare_emg_upsampling.py
 
 ![Örnek Çıktı](saved_plots/BasParmakEkstansiyon__emg2__overlay_native.png)
 
-
