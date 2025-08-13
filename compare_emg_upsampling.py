@@ -259,7 +259,7 @@ def main():
                 except Exception:
                     pass
             if want_save:
-                out = Path.cwd() / "saved_plots" / f"{sheet_safe}__{col}__overlay_native.png"
+                out = Path.cwd() / "saved_plots" / f"{sheet_safe}__{col}__overlay.png"
                 plt.savefig(out, dpi=150, bbox_inches="tight")
                 print(f"Saved: {out}")
             plt.show(block=True)
@@ -282,7 +282,7 @@ def main():
                         pass
                 if want_save:
                     lab_safe = "".join(c if c.isalnum() or c in "-_ " else "_" for c in lab)
-                    out = Path.cwd() / f"{sheet_safe}__{col}__{lab_safe}_native.png"
+                    out = Path.cwd() / "saved_plots" / f"{sheet_safe}__{col}__{lab_safe}.png"
                     plt.savefig(out, dpi=150, bbox_inches="tight")
                     print(f"Saved: {out}")
                 print(f"Showing figure for {lab}. Close the window to continue...")
