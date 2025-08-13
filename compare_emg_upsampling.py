@@ -1,32 +1,35 @@
 #!/usr/bin/env python3
 """
-compare_emg_upsampling.py (v3)
+compare_emg_upsampling.py (v6)
 
-Enhancements per user feedback:
-- Saving: if you choose to save plots, they are saved in the current working directory (no path prompt).
-- Time window: explicitly ask for both start and end; press Enter to skip either and keep full range.
-- Separate figures: shown sequentially (blocking) in the order of files; x-limits are matched across figures for comparability.
+Changes:
+- Automatically include ORIGINAL file named "30Temmuz_Ampute.xlsx" if it exists in the current directory.
+- Do NOT align to the original time grid (no prompt). All series are plotted on their native time bases.
+- No resampling prompts. (Pure visual comparison unless you apply a time window.)
+- Saving goes to current working directory when you choose to save.
+- Separate-figure mode shows windows sequentially; common x-limits applied for comparability.
 """
 
 import argparse
 from pathlib import Path
 import sys
 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Interactively compare EMG upsampling results across three Excel files."
-    )
-    parser.add_argument(
+    p = argparse.ArgumentParser(description="Compare ORIGINAL and upsampled EMG files (no alignment).")
+    p.add_argument(
         "--files",
         nargs=3,
         metavar=("CUBIC", "LINEAR", "POLYPHASE"),
-        help="Paths to the three Excel files in the order (cubic, linear, polyphase).",
+        help="Paths to the three upsampled Excel files in the order (cubic, linear, polyphase).",
     )
-    return parser.parse_args()
+    # --original kept but optional; will default to 30Temmuz_Ampute.xlsx if present in CWD
+    p.add_argument("--original", type=str, default=None, help="Path to ORIGINAL file (defaults to 30Temmuz_Ampute.xlsx in CWD).")
+    return p.parse_args()
 
 
 def default_files():
@@ -40,18 +43,13 @@ def default_files():
     return None
 
 
-def load_workbooks(file_paths):
-    workbooks = {}
-    for fp in file_paths:
-        label = Path(fp).stem  # e.g., 30Temmuz_Ampute_cubic
-        sheets = pd.read_excel(fp, sheet_name=None)
-        workbooks[label] = sheets
-    return workbooks
+def load_workbook(fp):
+    return pd.read_excel(fp, sheet_name=None)
 
 
 def get_common_sheets(workbooks):
     sheet_sets = [set(wb.keys()) for wb in workbooks.values()]
-    common = set.intersection(*sheet_sets)
+    common = set.intersection(*sheet_sets) if sheet_sets else set()
     return sorted(common)
 
 
@@ -112,7 +110,6 @@ def clean_time_series(series):
 
 
 def get_time_window(kind):
-    """Ask explicitly for start and end; empty input means no bound."""
     if kind == "numeric":
         start_str = input("Enter START (numeric) or press Enter for no lower bound: ").strip()
         end_str = input("Enter END (numeric)   or press Enter for no upper bound: ").strip()
@@ -145,25 +142,32 @@ def main():
     args = parse_args()
     files = args.files if args.files else default_files()
     if not files:
-        print("Error: Please pass three files with --files or place the three default files in the current directory.")
+        print("Error: Provide three upsampled files with --files or place the defaults in the current directory.")
         sys.exit(1)
 
-    for f in files:
-        if not Path(f).exists():
-            print(f"Error: File not found: {f}")
-            sys.exit(1)
+    labels = [Path(fp).stem for fp in files]
+    workbooks = {lab: load_workbook(fp) for lab, fp in zip(labels, files)}
 
-    workbooks = load_workbooks(files)
-    labels = list(workbooks.keys())  # keep file order
+    # Auto-include original: default to "30Temmuz_Ampute.xlsx" in CWD if not explicitly provided
+    original_path = args.original or "30Temmuz_Ampute.xlsx"
+    if Path(original_path).exists():
+        original_label = Path(original_path).stem
+        # Put ORIGINAL first for clarity in legends/titles
+        labels = [original_label] + labels
+        workbooks[original_label] = load_workbook(original_path)
+        print(f"Included ORIGINAL file: {original_path}")
+    else:
+        original_label = None
+        print("Note: ORIGINAL file not found in CWD (30Temmuz_Ampute.xlsx). Proceeding without it.")
+
+    print("\nLoaded files:")
+    for i, lab in enumerate(labels, 1):
+        print(f"  {i}. {lab}")
 
     common_sheets = get_common_sheets(workbooks)
     if not common_sheets:
         print("No common sheets across the provided files.")
         sys.exit(1)
-
-    print("\nLoaded files:")
-    for i, lab in enumerate(labels, 1):
-        print(f"  {i}. {lab}")
     print("\nCommon sheets across all files:")
     for s in common_sheets:
         print(f"  - {s}")
@@ -175,9 +179,9 @@ def main():
             print("Exiting.")
             break
 
-        # Determine common EMG columns
+        # EMG columns common to all files for this sheet
         emg_sets = []
-        time_names = []
+        time_kinds = []
         for lab in labels:
             df = workbooks[lab][sheet]
             tcol, emg_cols = get_emg_columns(df)
@@ -185,7 +189,8 @@ def main():
                 print(f"Error: No 'Time' column found in sheet '{sheet}' of {lab}.")
                 return
             emg_sets.append(set(emg_cols))
-            time_names.append(tcol)
+            _, k = clean_time_series(df[tcol])
+            time_kinds.append(k)
         common_emg = sorted(list(set.intersection(*emg_sets)))
         if not common_emg:
             print(f"No common EMG columns across files for sheet '{sheet}'.")
@@ -196,6 +201,27 @@ def main():
             print("Exiting.")
             break
 
+        # Build datasets on native time bases (no alignment)
+        datasets = []
+        for lab in labels:
+            df = workbooks[lab][sheet].copy()
+            tcol, _ = get_emg_columns(df)
+            t, _ = clean_time_series(df[tcol])
+            y = pd.to_numeric(df[col], errors="coerce")
+            aligned = pd.concat([t.rename("Time"), y.rename(col)], axis=1).dropna()
+            datasets.append((lab, aligned))
+
+        # Time window (use the original's time type if present, else first file)
+        if original_label is not None:
+            rep_df = workbooks[original_label][sheet]
+        else:
+            rep_df = workbooks[labels[0]][sheet]
+        rep_tcol, _ = get_emg_columns(rep_df)
+        _, rep_kind = clean_time_series(rep_df[rep_tcol])
+        if prompt_yes_no("Restrict to a time window?", default=False):
+            start, end = get_time_window(rep_kind)
+            datasets = [(lab, apply_window(df, start, end)) for (lab, df) in datasets]
+
         # Plot mode
         mode = prompt_choice("Plot mode:", ["Overlay in one figure", "Separate figures"])
         if mode is None:
@@ -203,45 +229,18 @@ def main():
             break
         overlay = (mode == "Overlay in one figure")
 
-        # Save or not (save in current working directory)
-        want_save = prompt_yes_no("Save plot(s) to disk? (saved in current working directory)")
-        save_dir = Path.cwd() if want_save else None
+        # Save or not (current working directory)
+        want_save = prompt_yes_no("Save plot(s) to disk in the current directory?")
 
-        # Build aligned datasets per file
-        datasets = []
-        time_kinds = []
-        for lab in labels:
-            df = workbooks[lab][sheet].copy()
-            tcol, _ = get_emg_columns(df)
-            t, tkind = clean_time_series(df[tcol])
-            y = pd.to_numeric(df[col], errors="coerce")
-            aligned = pd.concat([t.rename("Time"), y.rename(col)], axis=1).dropna()
-            datasets.append((lab, aligned))
-            time_kinds.append(tkind)
-
-        # Optional time window (only if all time kinds match)
-        if len(set(time_kinds)) == 1 and prompt_yes_no("Restrict to a time window?"):
-            start, end = get_time_window(time_kinds[0])
-            new_datasets = []
-            for lab, aligned in datasets:
-                new_datasets.append((lab, apply_window(aligned, start, end)))
-            datasets = new_datasets
-        elif len(set(time_kinds)) != 1:
-            print("Note: Time column types differ across files; skipping common window filter.")
-
-        # Determine common x-limits for comparability (both overlay and separate)
-        # Only if we have at least one datapoint in any dataset
+        # Common x-limits for comparability
         xmins, xmaxs = [], []
         for _, aligned in datasets:
             if not aligned.empty:
                 xmins.append(aligned["Time"].iloc[0])
                 xmaxs.append(aligned["Time"].iloc[-1])
-        xlim = None
-        if xmins and xmaxs:
-            # Use global min and max across datasets
-            xlim = (min(xmins), max(xmaxs))
+        xlim = (min(xmins), max(xmaxs)) if xmins and xmaxs else None
 
-        # Plotting
+        sheet_safe = "".join(c if c.isalnum() or c in "-_ " else "_" for c in sheet)
         if overlay:
             plt.figure()
             for lab, aligned in datasets:
@@ -251,7 +250,7 @@ def main():
                 plt.plot(aligned["Time"].values, aligned[col].values, label=lab)
             plt.xlabel("Time")
             plt.ylabel(col)
-            plt.title(f"{sheet} — {col} (Comparison)")
+            plt.title(f"{sheet} — {col} (Comparison, native time bases)")
             plt.legend()
             plt.tight_layout()
             if xlim is not None:
@@ -259,14 +258,12 @@ def main():
                     plt.xlim(xlim)
                 except Exception:
                     pass
-            if save_dir:
-                safe_sheet = "".join(c if c.isalnum() or c in "-_ " else "_" for c in sheet)
-                out = save_dir / f"{safe_sheet}__{col}__overlay.png"
+            if want_save:
+                out = Path.cwd() / "saved_plots" / f"{sheet_safe}__{col}__overlay_native.png"
                 plt.savefig(out, dpi=150, bbox_inches="tight")
                 print(f"Saved: {out}")
             plt.show(block=True)
         else:
-            # Separate figures, sequential, with matching xlim where possible
             for lab, aligned in datasets:
                 plt.figure()
                 if aligned.empty:
@@ -275,7 +272,7 @@ def main():
                     plt.plot(aligned["Time"].values, aligned[col].values, label=lab)
                 plt.xlabel("Time")
                 plt.ylabel(col)
-                plt.title(f"{sheet} — {col} ({lab})")
+                plt.title(f"{sheet} — {col} ({lab}, native time)")
                 plt.legend()
                 plt.tight_layout()
                 if xlim is not None:
@@ -283,13 +280,11 @@ def main():
                         plt.xlim(xlim)
                     except Exception:
                         pass
-                if save_dir:
-                    safe_sheet = "".join(c if c.isalnum() or c in "-_ " else "_" for c in sheet)
-                    safe_lab = "".join(c if c.isalnum() or c in "-_ " else "_" for c in lab)
-                    out = save_dir / f"{safe_sheet}__{col}__{safe_lab}.png"
+                if want_save:
+                    lab_safe = "".join(c if c.isalnum() or c in "-_ " else "_" for c in lab)
+                    out = Path.cwd() / f"{sheet_safe}__{col}__{lab_safe}_native.png"
                     plt.savefig(out, dpi=150, bbox_inches="tight")
                     print(f"Saved: {out}")
-                # Show each figure and wait until closed before continuing
                 print(f"Showing figure for {lab}. Close the window to continue...")
                 plt.show(block=True)
 
