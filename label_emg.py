@@ -16,8 +16,8 @@ WRITE_WINDOWS   = False     # True -> also writes window_labels.csv
 USE_KMEANS      = True      # True -> filter noisy segments via KMeans(k=2) per sheet
 
 # Segmentation params
-WINDOW_MS       = 250.0     # feature window length
-OVERLAP         = 0.5       # 50% overlap
+WINDOW_MS       = 500.0     # feature window length
+OVERLAP         = 0.9       # 50% overlap
 THR_K           = 3.0       # baseline mean + K*std
 VOTE_CHANNELS   = 3         # window active if >= this many channels fire
 MERGE_GAP_MS    = 200.0     # join gaps <= this to avoid splitting one movement
