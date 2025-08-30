@@ -1,0 +1,15 @@
+start_time_s,end_time_s,sheet,label,confidence,source,notes
+0.09,0.23,Supinasyon,movement_attempt,0.8,auto,vote>=2
+0.58,0.71,Supinasyon,movement_attempt,0.8,auto,vote>=2
+1.75,1.84,Supinasyon,movement_attempt,0.8,auto,vote>=2
+2.0,2.12,Supinasyon,movement_attempt,0.8,auto,vote>=2
+2.62,2.75,Supinasyon,movement_attempt,0.8,auto,vote>=2
+2.88,3.12,Supinasyon,movement_attempt,0.8,auto,vote>=2
+3.48,5.08,Supinasyon,movement_attempt,0.8,auto,vote>=2
+5.18,6.8,Supinasyon,movement_attempt,0.8,auto,vote>=2
+7.13,7.28,Supinasyon,movement_attempt,0.8,auto,vote>=2
+7.63,7.87,Supinasyon,movement_attempt,0.8,auto,vote>=2
+8.11,9.29,Supinasyon,movement_attempt,0.8,auto,vote>=2
+10.03,10.36,Supinasyon,movement_attempt,0.8,auto,vote>=2
+10.66,11.77,Supinasyon,movement_attempt,0.8,auto,vote>=2
+11.82,12.05,Supinasyon,movement_attempt,0.8,auto,vote>=2

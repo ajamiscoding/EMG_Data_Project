@@ -1,0 +1,11 @@
+start_time_s,end_time_s,sheet,label,confidence,source,notes
+2.46,3.44,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+5.04,5.53,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+7.33,7.67,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+8.96,9.27,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+9.5,9.96,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+11.83,12.47,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+12.67,12.99,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+13.89,14.48,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+17.01,17.19,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+17.33,17.91,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2 + meanZ gate

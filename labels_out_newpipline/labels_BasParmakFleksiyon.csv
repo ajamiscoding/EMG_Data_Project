@@ -1,0 +1,15 @@
+start_time_s,end_time_s,sheet,label,confidence,source,notes
+1.69,1.87,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+1.9,2.04,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+2.15,3.45,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+4.34,4.43,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+4.5,4.63,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+4.74,4.89,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+4.94,5.56,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+7.01,7.08,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+7.24,7.85,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+8.98,10.29,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+11.46,12.51,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+12.63,13.0,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+13.42,13.83,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2
+13.86,14.48,BasParmakFleksiyon,movement_attempt,0.8,auto,vote>=2

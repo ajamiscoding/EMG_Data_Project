@@ -1,0 +1,14 @@
+start_time_s,end_time_s,sheet,label,confidence,source,notes
+0.89,1.11,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+2.06,2.93,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+3.97,4.68,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+5.72,6.35,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+7.17,7.74,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+9.08,9.81,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+10.54,11.12,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+12.15,12.83,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+13.63,14.42,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+15.13,15.79,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+16.48,16.99,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+17.01,17.19,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2
+17.82,18.45,BasParmakEkstansiyon,movement_attempt,0.8,auto,vote>=2

@@ -1,0 +1,3 @@
+start_time_s,end_time_s,sheet,label,confidence,source,notes
+11.44,12.19,El-Kapat,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+18.54,18.82,El-Kapat,movement_attempt,0.8,auto,vote>=2 + meanZ gate

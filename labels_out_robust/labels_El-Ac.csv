@@ -1,0 +1,13 @@
+start_time_s,end_time_s,sheet,label,confidence,source,notes
+1.21,1.56,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+2.06,2.33,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+4.4,4.73,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+5.16,5.34,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+6.02,6.23,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+9.83,10.09,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+10.83,11.17,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+13.78,14.47,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+14.99,15.14,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+16.13,16.29,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+17.57,17.9,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
+18.16,18.41,El-Ac,movement_attempt,0.8,auto,vote>=2 + meanZ gate
