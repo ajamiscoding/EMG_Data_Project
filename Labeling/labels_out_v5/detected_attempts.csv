@@ -1,0 +1,17 @@
+Sheet,Attempt_ID,Start_time,End_time,Duration_ms
+BasParmakEkstansiyon,1,1863.0,4913.0,3050.0
+BasParmakEkstansiyon,2,6183.0,7973.0,1790.0
+BasParmakEkstansiyon,3,9063.0,18773.0,9710.0
+BasParmakFleksiyon,1,1487.0,5797.0,4310.0
+BasParmakFleksiyon,2,7067.0,14797.0,7730.0
+El-Ac,1,962.0,2752.0,1790.0
+El-Ac,2,10142.0,11032.0,890.0
+El-Ac,3,13202.0,18772.0,5570.0
+El-Kapat,1,62.0,7612.0,7550.0
+El-Kapat,2,11042.0,14452.0,3410.0
+Pronasyon,1,3827.0,11737.0,7910.0
+Pronasyon,2,12647.0,14437.0,1790.0
+Pronasyon,3,15167.0,16957.0,1790.0
+Pronasyon,4,18047.0,19657.0,1610.0
+Pronasyon,5,22007.0,23797.0,1790.0
+Pronasyon,6,25067.0,26497.0,1430.0
