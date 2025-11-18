@@ -5,9 +5,9 @@ from scipy.signal import resample_poly
 from fractions import Fraction
 
 # --- CONFIG ---
-input_file = "30Temmuz_Ampute.xlsx"
-output_file = "30Temmuz_Ampute_polyphase.xlsx"
-time_step = 10  # milliseconds (ms)
+input_file = "Cuneyt_Yilmaz.xlsx"
+output_file = "Cuneyt_Yilmaz_polyphase_1ms.xlsx"
+time_step = 1  # milliseconds (ms)
 
 # Read all sheets
 sheets = pd.read_excel(input_file, sheet_name=None)
